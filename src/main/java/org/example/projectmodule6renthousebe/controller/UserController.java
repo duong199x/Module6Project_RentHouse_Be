@@ -98,11 +98,6 @@ public class UserController {
         return ResponseEntity.ok(new JwtResponse(jwt, currentUser.getId(), userDetails.getUsername(), userDetails.getAuthorities()));
     }
 
-    @GetMapping("/hello")
-    public ResponseEntity<String> hello() {
-        return new ResponseEntity<>("Hello World", HttpStatus.OK);
-    }
-
     @GetMapping("/users/{id}")
     public ResponseEntity<User> getProfile(@PathVariable Long id) {
         Optional<User> userOptional = this.userService.findById(id);
@@ -113,10 +108,10 @@ public class UserController {
     public ResponseEntity<User> updateUserProfile(@PathVariable Long id, @RequestBody User user) {
         user.setId(id);
         Optional<User> userOptional = this.userService.findById(id);
-        User user1 = userOptional.get();
-        if (!userOptional.isPresent()) {
+        if (userOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        User user1 = userOptional.get();
         user1.setUsername(user.getUsername());
         user1.setDateOfBirth(user.getDateOfBirth());
         user1.setEmail(user.getEmail());
@@ -128,20 +123,14 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PutMapping("/users/avatar/{id}")
+    @PatchMapping("/users/avatar/{id}")
     public ResponseEntity<User> updateUserAvatar(@PathVariable Long id, @RequestBody User user) {
         user.setId(id);
         Optional<User> userOptional = this.userService.findById(id);
-        User user1 = userOptional.get();
-        if (!userOptional.isPresent()) {
+        if (userOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        user1.setUsername(user1.getUsername());
-        user1.setDateOfBirth(user1.getDateOfBirth());
-        user1.setEmail(user1.getEmail());
-        user1.setPassword(user1.getPassword());
-        user1.setConfirmPassword(user1.getConfirmPassword());
-        user1.setRoles(user1.getRoles());
+        User user1 = userOptional.get();
         user1.setImageUser(user.getImageUser());
         userService.save(user1);
         return new ResponseEntity<>(user, HttpStatus.OK);
