@@ -1,6 +1,7 @@
 package org.example.projectmodule6renthousebe.controller;
 
 import org.example.projectmodule6renthousebe.dto.JwtDTO;
+import org.example.projectmodule6renthousebe.requests.PasswordRequest;
 import org.example.projectmodule6renthousebe.dto.UserDTO;
 import org.example.projectmodule6renthousebe.model.account.JwtResponse;
 import org.example.projectmodule6renthousebe.model.account.Role;
@@ -9,7 +10,6 @@ import org.example.projectmodule6renthousebe.service.RoleService;
 import org.example.projectmodule6renthousebe.service.UserService;
 import org.example.projectmodule6renthousebe.service.impl.JwtService;
 import org.example.projectmodule6renthousebe.utils.ModelMapperUtil;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -90,7 +90,7 @@ public class UserController {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setConfirmPassword(passwordEncoder.encode(user.getConfirmPassword()));
         userService.save(user);
-        return new ResponseEntity<>(modelMapperUtil.map(user,UserDTO.class), HttpStatus.CREATED);
+        return new ResponseEntity<>(modelMapperUtil.map(user, UserDTO.class), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
@@ -106,7 +106,7 @@ public class UserController {
     @GetMapping("/users/{id}")
     public ResponseEntity<UserDTO> getProfile(@PathVariable Long id) {
         Optional<User> userOptional = this.userService.findById(id);
-        return userOptional.map(user -> new ResponseEntity<>(modelMapperUtil.map(user,UserDTO.class), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return userOptional.map(user -> new ResponseEntity<>(modelMapperUtil.map(user, UserDTO.class), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PatchMapping("/users/{id}")
@@ -129,7 +129,7 @@ public class UserController {
         user1.setEmail(user.getEmail());
         user1.setImageUser(user1.getImageUser());
         userService.save(user1);
-        return new ResponseEntity<>(modelMapperUtil.map(user,UserDTO.class), HttpStatus.OK);
+        return new ResponseEntity<>(modelMapperUtil.map(user, UserDTO.class), HttpStatus.OK);
     }
 
     @PatchMapping("/users/avatar/{id}")
@@ -160,4 +160,19 @@ public class UserController {
         }
     }
 
+    @PatchMapping("/users/change-password")
+    public ResponseEntity<?> changePassword(@RequestBody PasswordRequest passwordRequest) {
+        User currentUser = userService.getCurrentUser();
+        if (passwordEncoder.matches(passwordRequest.getOldPassword(), currentUser.getPassword())) {
+            if (!passwordRequest.getPassword().equals(passwordRequest.getConfirmPassword())) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            String newPassword = passwordEncoder.encode(passwordRequest.getPassword());
+            currentUser.setPassword(newPassword);
+            currentUser.setConfirmPassword(newPassword);
+            userService.save(currentUser);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
 }
