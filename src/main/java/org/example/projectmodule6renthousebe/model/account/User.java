@@ -2,12 +2,14 @@ package org.example.projectmodule6renthousebe.model.account;
 
 import jakarta.persistence.*;
 import javax.validation.constraints.Email;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Set;
 
 @Entity
 @Table(name = "userTable")
 public class User implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -30,6 +32,8 @@ public class User implements Serializable {
     private String imageUser;
     private int isOwner;
     private boolean enabled = true;
+    @Column(columnDefinition = "tinyint default 0")
+    private boolean deleteFlag;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
@@ -62,6 +66,14 @@ public class User implements Serializable {
     }
 
     public User() {
+    }
+
+    public boolean isDeleteFlag() {
+        return deleteFlag;
+    }
+
+    public void setDeleteFlag(boolean deleteFlag) {
+        this.deleteFlag = deleteFlag;
     }
 
     public static long getSerialVersionUID() {

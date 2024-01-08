@@ -2,6 +2,8 @@ package org.example.projectmodule6renthousebe.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.example.projectmodule6renthousebe.model.account.User;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -19,10 +21,6 @@ public class House {
     private String description;
     @Column(nullable = false)
     private double price;
-    @CreationTimestamp
-    private LocalDateTime startTime;
-    @CreationTimestamp
-    private LocalDateTime endTime;
     @Column(nullable = false)
     private String location;
     @Column(nullable = false)
@@ -33,6 +31,8 @@ public class House {
     private int livingRoom;
     @Column(nullable = false)
     private int kitchen;
+
+
     @ManyToOne
     private Category category;
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -46,4 +46,10 @@ public class House {
             }
     )
     private Set<Convenient> convenients;
+
+    @Column(columnDefinition = "tinyint default 0")
+    private boolean deleteFlag;
+    @ManyToOne
+    private User user;
+
 }
