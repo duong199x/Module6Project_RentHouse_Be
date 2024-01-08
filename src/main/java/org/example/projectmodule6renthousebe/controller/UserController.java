@@ -1,7 +1,7 @@
 package org.example.projectmodule6renthousebe.controller;
 
 import org.example.projectmodule6renthousebe.dto.JwtDTO;
-import org.example.projectmodule6renthousebe.dto.PasswordRequest;
+import org.example.projectmodule6renthousebe.requests.PasswordRequest;
 import org.example.projectmodule6renthousebe.dto.UserDTO;
 import org.example.projectmodule6renthousebe.model.account.JwtResponse;
 import org.example.projectmodule6renthousebe.model.account.Role;
@@ -10,7 +10,6 @@ import org.example.projectmodule6renthousebe.service.RoleService;
 import org.example.projectmodule6renthousebe.service.UserService;
 import org.example.projectmodule6renthousebe.service.impl.JwtService;
 import org.example.projectmodule6renthousebe.utils.ModelMapperUtil;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

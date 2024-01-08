@@ -1,4 +1,4 @@
-package org.example.projectmodule6renthousebe.dto;
+package org.example.projectmodule6renthousebe.requests;
 
 import lombok.Data;
 
