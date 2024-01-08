@@ -1,4 +1,6 @@
 package org.example.projectmodule6renthousebe.service;
 
-public interface ConvenientService <E>{
+import org.example.projectmodule6renthousebe.model.Convenient;
+
+public interface ConvenientService extends IGenerateService<Convenient>{
 }
