@@ -1,11 +1,16 @@
 package org.example.projectmodule6renthousebe.controller;
 
+import org.example.projectmodule6renthousebe.dto.JwtDTO;
+import org.example.projectmodule6renthousebe.dto.PasswordRequest;
+import org.example.projectmodule6renthousebe.dto.UserDTO;
 import org.example.projectmodule6renthousebe.model.account.JwtResponse;
 import org.example.projectmodule6renthousebe.model.account.Role;
 import org.example.projectmodule6renthousebe.model.account.User;
 import org.example.projectmodule6renthousebe.service.RoleService;
 import org.example.projectmodule6renthousebe.service.UserService;
 import org.example.projectmodule6renthousebe.service.impl.JwtService;
+import org.example.projectmodule6renthousebe.utils.ModelMapperUtil;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +45,8 @@ public class UserController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private ModelMapperUtil modelMapperUtil;
 
 
     @GetMapping("/users")
@@ -84,7 +91,7 @@ public class UserController {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setConfirmPassword(passwordEncoder.encode(user.getConfirmPassword()));
         userService.save(user);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        return new ResponseEntity<>(modelMapperUtil.map(user, UserDTO.class), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
@@ -94,60 +101,79 @@ public class UserController {
         String jwt = jwtService.generateTokenLogin(authentication);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
-        return ResponseEntity.ok(new JwtResponse(jwt, currentUser.getId(), userDetails.getUsername(), userDetails.getAuthorities()));
+        return ResponseEntity.ok(modelMapperUtil.map(new JwtResponse(jwt, currentUser.getId(), userDetails.getUsername(), userDetails.getAuthorities()), JwtDTO.class));
     }
 
-    @GetMapping("/users/profile")
-    public ResponseEntity<User> getProfile() {
-        User userOptional = this.userService.getCurrentUser();
-        return new ResponseEntity<>(userOptional,HttpStatus.OK);
+    @GetMapping("/users/{id}")
+    public ResponseEntity<UserDTO> getProfile(@PathVariable Long id) {
+        Optional<User> userOptional = this.userService.findById(id);
+        return userOptional.map(user -> new ResponseEntity<>(modelMapperUtil.map(user, UserDTO.class), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PutMapping("/users/profile")
-    public ResponseEntity<User> updateUserProfile(@PathVariable Long id, @RequestBody User user) {
+    @PatchMapping("/users/{id}")
+    public ResponseEntity<UserDTO> updateUserProfile(@PathVariable Long id, @RequestBody User user) {
         user.setId(id);
         Optional<User> userOptional = this.userService.findById(id);
+        Long authenticatedUserId = this.userService.getCurrentUser().getId();
+        if (!authenticatedUserId.equals(id)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         if (userOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         User user1 = userOptional.get();
-        user1.setUsername(user.getUsername());
+        user1.setFullName(user.getFullName());
+        user1.setAddress(user.getAddress());
+        user1.setPhone(user.getPhone());
+        user1.setAge(user.getAge());
         user1.setDateOfBirth(user.getDateOfBirth());
         user1.setEmail(user.getEmail());
-        user1.setPassword(user1.getPassword());
-        user1.setConfirmPassword(user1.getConfirmPassword());
-        user1.setRoles(user1.getRoles());
         user1.setImageUser(user1.getImageUser());
         userService.save(user1);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseEntity<>(modelMapperUtil.map(user, UserDTO.class), HttpStatus.OK);
     }
 
     @PatchMapping("/users/avatar/{id}")
-    public ResponseEntity<User> updateUserAvatar(@PathVariable Long id, @RequestBody User user) {
+    public ResponseEntity<UserDTO> updateUserAvatar(@PathVariable Long id, @RequestBody User user) {
         user.setId(id);
         Optional<User> userOptional = this.userService.findById(id);
+        Long authenticatedUserId = this.userService.getCurrentUser().getId();
+        if (!authenticatedUserId.equals(id)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         if (userOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         User user1 = userOptional.get();
         user1.setImageUser(user.getImageUser());
         userService.save(user1);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseEntity<>(modelMapperUtil.map(user, UserDTO.class), HttpStatus.OK);
     }
 
     @GetMapping("/admin/search")
-    public ResponseEntity<List<User>> searchUser(@RequestParam String name) {
+    public ResponseEntity<List<UserDTO>> searchUser(@RequestParam String name) {
         List<User> userList = (List<User>) userService.searchUserByName(name);
         if (userList == null) {
             List<User> users = (List<User>) userService.findAll();
-            return new ResponseEntity<>(users, HttpStatus.OK);
+            return new ResponseEntity<>(modelMapperUtil.mapList(users, UserDTO.class), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(userList, HttpStatus.OK);
+            return new ResponseEntity<>(modelMapperUtil.mapList(userList, UserDTO.class), HttpStatus.OK);
         }
     }
-    @PutMapping("/change-password")
-    public ResponseEntity<?> changePassword(@RequestBody User user){
 
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    @PatchMapping("/users/change-password")
+    public ResponseEntity<?> changePassword(@RequestBody PasswordRequest passwordRequest) {
+        User currentUser = userService.getCurrentUser();
+        if (passwordEncoder.matches(passwordRequest.getOldPassword(), currentUser.getPassword())) {
+            if (!passwordRequest.getPassword().equals(passwordRequest.getConfirmPassword())) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            String newPassword = passwordEncoder.encode(passwordRequest.getPassword());
+            currentUser.setPassword(newPassword);
+            currentUser.setConfirmPassword(newPassword);
+            userService.save(currentUser);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }
