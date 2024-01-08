@@ -81,7 +81,6 @@ public class UserController {
             roles1.add(role1);
             user.setRoles(roles1);
         }
-        user.setIsOwner(0);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setConfirmPassword(passwordEncoder.encode(user.getConfirmPassword()));
         userService.save(user);
@@ -98,13 +97,13 @@ public class UserController {
         return ResponseEntity.ok(new JwtResponse(jwt, currentUser.getId(), userDetails.getUsername(), userDetails.getAuthorities()));
     }
 
-    @GetMapping("/users/{id}")
-    public ResponseEntity<User> getProfile(@PathVariable Long id) {
-        Optional<User> userOptional = this.userService.findById(id);
-        return userOptional.map(user -> new ResponseEntity<>(user, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    @GetMapping("/users/profile")
+    public ResponseEntity<User> getProfile() {
+        User userOptional = this.userService.getCurrentUser();
+        return new ResponseEntity<>(userOptional,HttpStatus.OK);
     }
 
-    @PutMapping("/users/{id}")
+    @PutMapping("/users/profile")
     public ResponseEntity<User> updateUserProfile(@PathVariable Long id, @RequestBody User user) {
         user.setId(id);
         Optional<User> userOptional = this.userService.findById(id);
@@ -136,7 +135,7 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @GetMapping("/search")
+    @GetMapping("/admin/search")
     public ResponseEntity<List<User>> searchUser(@RequestParam String name) {
         List<User> userList = (List<User>) userService.searchUserByName(name);
         if (userList == null) {
@@ -145,5 +144,10 @@ public class UserController {
         } else {
             return new ResponseEntity<>(userList, HttpStatus.OK);
         }
+    }
+    @PutMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestBody User user){
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 }
