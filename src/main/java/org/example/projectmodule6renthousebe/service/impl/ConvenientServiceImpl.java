@@ -15,12 +15,13 @@ public class ConvenientServiceImpl implements ConvenientService {
     private ConvenientRepository convenientRepository;
     @Override
     public Iterable<Convenient> findAll() {
+
         return convenientRepository.findAll();
     }
 
     @Override
     public Iterable<Convenient> findAllByDeleteFlag(boolean deleteFlag) {
-        return null;
+        return convenientRepository.findAllByDeleteFlag(false);
     }
 
     @Override
@@ -36,7 +37,9 @@ public class ConvenientServiceImpl implements ConvenientService {
     @Override
     public void delete(Long id) {
         Optional<Convenient> convenient = convenientRepository.findById(id);
-        convenient.ifPresent(value -> value.setDeleteFlag(true));
-        convenientRepository.save(convenient.get());
+        if (convenient.isPresent()) {
+            convenient.get().setDeleteFlag(true);
+            convenientRepository.save(convenient.get());
+        }
     }
 }
