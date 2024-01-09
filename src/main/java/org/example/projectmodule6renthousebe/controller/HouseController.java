@@ -3,6 +3,7 @@ package org.example.projectmodule6renthousebe.controller;
 import org.example.projectmodule6renthousebe.dto.HouseDTO;
 import org.example.projectmodule6renthousebe.model.House;
 import org.example.projectmodule6renthousebe.service.impl.HouseServiceImpl;
+import org.example.projectmodule6renthousebe.utils.ModelMapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,7 +24,7 @@ public class HouseController {
     @Autowired
     private HouseServiceImpl houseService;
     @Autowired
-    private MapperUtil mapperUtil;
+    private ModelMapperUtil mapperUtil;
 
     @GetMapping("")
     public ResponseEntity<List<HouseDTO>> showAll() {
