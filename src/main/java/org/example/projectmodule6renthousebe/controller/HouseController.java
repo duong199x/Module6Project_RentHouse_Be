@@ -43,12 +43,12 @@ public class HouseController {
     @PostMapping("/create")
     public ResponseEntity<CreateHouseResponse> save(@RequestBody CreateHouseRequest request) {
         try {
-            houseService.save(house);
+            House saveHouse = houseService.save(request);
             List<String> imageList = request.getImages();
-            houseService.saveImageListAsync(savedHouse, imageList);
-            return new ResponseEntity<>(new CreateHouseResponse(true,"MS-HO-01"), HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>(new CreateHouseResponse(false,"ER-HO-01"), HttpStatus.BAD_REQUEST);
+            houseService.saveImageListAsync(saveHouse, imageList);
+            return new ResponseEntity<>(new CreateHouseResponse(true, "MS-HO-01"), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new CreateHouseResponse(false, "ER-HO-01"), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -116,15 +116,16 @@ public class HouseController {
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<HouseDTO>> getAllByUserId(@PathVariable Long userId) {
-        List<House> house = (List<House>) houseService.findAllByUserIdAndDeleteFlag(userId,false);
+        List<House> house = (List<House>) houseService.findAllByUserIdAndDeleteFlag(userId, false);
         if (house.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(mapperUtil.mapList(house, HouseDTO.class), HttpStatus.OK);
     }
+
     @GetMapping("/search")
     public ResponseEntity<List<HouseDTO>> searchByName(@RequestParam String name) {
-        List<House> house = (List<House>) houseService.findByNameContainsIgnoreCaseAndDeleteFlag(name,false);
+        List<House> house = (List<House>) houseService.findByNameContainsIgnoreCaseAndDeleteFlag(name, false);
         if (house.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
