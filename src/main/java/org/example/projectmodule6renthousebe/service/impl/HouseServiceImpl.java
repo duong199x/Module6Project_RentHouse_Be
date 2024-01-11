@@ -1,5 +1,6 @@
 package org.example.projectmodule6renthousebe.service.impl;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.example.projectmodule6renthousebe.model.Convenient;
 import org.example.projectmodule6renthousebe.model.House;
 import org.example.projectmodule6renthousebe.model.Image;
@@ -16,6 +17,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -26,7 +28,7 @@ public class HouseServiceImpl implements HouseService {
     @Autowired
     private HouseRepository houseRepository;
     @Autowired
-    private ConvenientRepository convenient;
+    private ConvenientRepository convenientRepository;
     @Autowired
     private ImageServiceImpl imageService;
 
@@ -62,6 +64,15 @@ public class HouseServiceImpl implements HouseService {
         house.setLocation(request.getLocation());
         house.setBathRoom(request.getBathRoom());
         house.setLivingRoom(request.getLivingRoom());
+        Set<Convenient> newConvenients = new HashSet<>();
+        if (request.getConvenientIds() != null && !request.getConvenientIds().isEmpty()) {
+            for (Long convenientId : request.getConvenientIds()) {
+                Convenient convenient = convenientRepository.findById(convenientId)
+                        .orElseThrow(() -> new EntityNotFoundException("Convenient with id " + convenientId + " not found."));
+                newConvenients.add(convenient);
+            }
+        }
+        house.setConvenients(newConvenients);
         return houseRepository.save(house);
     }
     @Async
@@ -110,18 +121,17 @@ public class HouseServiceImpl implements HouseService {
         return houseRepository.findByNameContainsIgnoreCaseAndDeleteFlag(name,deleteFlag);
     }
 
-    @Transactional
-    public void addConvenientsToHouse(Long houseId, List<Long> convenientIds) {
-        Optional<House> houseOptional = houseRepository.findById(houseId);
-        if (houseOptional.isPresent()) {
-            House house = houseOptional.get();
-
-            Set<Convenient> convenients = house.getConvenients();
-            convenients.addAll(convenient.findAllById(convenientIds));
-
-            houseRepository.save(house);
-        } else {
-            throw new RuntimeException("House not found");
-        }
-    }
+//    @Transactional
+//    public void addConvenientsToHouse(Long houseId, List<Long> convenientIds) {
+//        Optional<House> houseOptional = houseRepository.findById(houseId);
+//        if (houseOptional.isPresent()) {
+//            House house = houseOptional.get();
+//            Set<Convenient> convenients = house.getConvenients();
+//            convenients.addAll(convenient.findAllById(convenientIds));
+//
+//            houseRepository.save(house);
+//        } else {
+//            throw new RuntimeException("House not found");
+//        }
+//    }
 }
