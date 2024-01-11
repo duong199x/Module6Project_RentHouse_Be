@@ -3,6 +3,7 @@ package org.example.projectmodule6renthousebe.controller;
 import org.example.projectmodule6renthousebe.dto.HouseDTO;
 import org.example.projectmodule6renthousebe.model.House;
 import org.example.projectmodule6renthousebe.requests.CreateHouseRequest;
+import org.example.projectmodule6renthousebe.response.CreateHouseResponse;
 import org.example.projectmodule6renthousebe.service.impl.HouseServiceImpl;
 import org.example.projectmodule6renthousebe.utils.ModelMapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,11 +41,15 @@ public class HouseController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<House> save(@RequestBody CreateHouseRequest request) {
-        House savedHouse = houseService.save(request);
-        List<String> imageList = request.getImages();
-        houseService.saveImageListAsync(savedHouse, imageList);
-        return new ResponseEntity<>(savedHouse,HttpStatus.OK);
+    public ResponseEntity<CreateHouseResponse> save(@RequestBody CreateHouseRequest request) {
+        try {
+            houseService.save(house);
+            List<String> imageList = request.getImages();
+            houseService.saveImageListAsync(savedHouse, imageList);
+            return new ResponseEntity<>(new CreateHouseResponse(true,"MS-HO-01"), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(new CreateHouseResponse(false,"ER-HO-01"), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/delete/{id}")
