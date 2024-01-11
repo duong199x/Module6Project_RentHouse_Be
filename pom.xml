@@ -120,6 +120,13 @@
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 
+		<!-- Firebase Admin SDK -->
+		<dependency>
+			<groupId>com.google.firebase</groupId>
+			<artifactId>firebase-admin</artifactId>
+			<version>7.3.0</version> <!-- Hoặc phiên bản mới nhất -->
+		</dependency>
+
 	</dependencies>
 
 	<build>
