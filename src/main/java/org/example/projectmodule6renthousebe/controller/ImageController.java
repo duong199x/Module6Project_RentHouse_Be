@@ -6,7 +6,7 @@ import org.example.projectmodule6renthousebe.service.impl.ImageServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,13 +29,12 @@ public class ImageController {
 
     @PostMapping("/create/{houseId}")
     public ResponseEntity<Iterable<Image>> save(@PathVariable Long houseId, @RequestBody List<String> productImages) {
-
         return new ResponseEntity<>(imageService.addImagesToHouse(houseId, productImages), HttpStatus.OK);
     }
 
     @GetMapping("/{houseId}")
     public ResponseEntity<List<Image>> getAllByHouseId(@PathVariable Long houseId) {
-        List<Image> images = (List<Image>) imageService.findAllByHouseId(houseId);
+        List<Image> images = (List<Image>) imageService.findAllByHouseIdAndDeleteFlag(houseId,false);
         if (images.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

@@ -2,6 +2,7 @@ package org.example.projectmodule6renthousebe.controller;
 
 import org.example.projectmodule6renthousebe.dto.HouseDTO;
 import org.example.projectmodule6renthousebe.model.House;
+import org.example.projectmodule6renthousebe.requests.CreateHouseRequest;
 import org.example.projectmodule6renthousebe.service.impl.HouseServiceImpl;
 import org.example.projectmodule6renthousebe.utils.ModelMapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,9 +38,13 @@ public class HouseController {
         return new ResponseEntity<>(mapperUtil.mapList(house, HouseDTO.class), HttpStatus.OK);
     }
 
+
     @PostMapping("/create")
-    public ResponseEntity<House> save(@RequestBody House house) {
-        return new ResponseEntity<>(houseService.save(house), HttpStatus.OK);
+    public ResponseEntity<House> save(@RequestBody CreateHouseRequest request) {
+        House savedHouse = houseService.save(request);
+        List<String> imageList = request.getImages();
+        houseService.saveImageListAsync(savedHouse, imageList);
+        return new ResponseEntity<>(savedHouse,HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -100,6 +107,23 @@ public class HouseController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error adding convenients to house: " + e.getMessage());
         }
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<HouseDTO>> getAllByUserId(@PathVariable Long userId) {
+        List<House> house = (List<House>) houseService.findAllByUserIdAndDeleteFlag(userId,false);
+        if (house.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(mapperUtil.mapList(house, HouseDTO.class), HttpStatus.OK);
+    }
+    @GetMapping("/search")
+    public ResponseEntity<List<HouseDTO>> searchByName(@RequestParam String name) {
+        List<House> house = (List<House>) houseService.findByNameContainsIgnoreCaseAndDeleteFlag(name,false);
+        if (house.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(mapperUtil.mapList(house, HouseDTO.class), HttpStatus.OK);
     }
 
 

@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface ImageRepository extends JpaRepository<Image, Long> {
     Iterable<Image> findAllByDeleteFlag(boolean deleteFlag);
-    Iterable<Image> findAllByHouseId(Long houseId);
+    Iterable<Image> findAllByHouseIdAndDeleteFlag(Long houseId,boolean deleteFlag);
 
 }
