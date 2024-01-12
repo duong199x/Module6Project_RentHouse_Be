@@ -1,16 +1,17 @@
 package vn.codegym.houserental.service.impl;
 
 
-import vn.codegym.houserental.model.account.User;
-import vn.codegym.houserental.model.account.UserPrinciple;
-import vn.codegym.houserental.repository.UserRepository;
-import vn.codegym.houserental.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vn.codegym.houserental.exception.CommonException;
+import vn.codegym.houserental.model.account.User;
+import vn.codegym.houserental.model.account.UserPrinciple;
+import vn.codegym.houserental.repository.UserRepository;
+import vn.codegym.houserental.service.UserService;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -29,21 +30,18 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new UsernameNotFoundException(username);
         }
-        if (this.checkLogin(user)) {
-            return UserPrinciple.build(user);
-        }
-        boolean enable = false;
-        boolean accountNonExpired = false;
-        boolean credentialsNonExpired = false;
-        boolean accountNonLocked = false;
-        return new org.springframework.security.core.userdetails.User(user.getUsername(),
-                user.getPassword(), enable, accountNonExpired, credentialsNonExpired,
-                accountNonLocked, null);
+        return UserPrinciple.build(user);
     }
 
 
     @Override
-    public void save(User user) {
+    public void save(User user) throws CommonException {
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new CommonException("Username đã tồn tại");
+        }
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new CommonException("Email đã tồn tại");
+        }
         userRepository.save(user);
     }
 
@@ -130,6 +128,7 @@ public class UserServiceImpl implements UserService {
     public Iterable<User> searchUserByName(String name) {
         return userRepository.findByUsernameContaining(name);
     }
+
     @Override
     public String generateVerificationToken(User user) {
         String token = UUID.randomUUID().toString();
@@ -146,7 +145,7 @@ public class UserServiceImpl implements UserService {
     public boolean activateUserAccount(String token) {
         User user = userRepository.findByVerificationToken(token);
         if (user != null && !user.isEnabled()) {
-            if(user.getVerificationTokenExpiryDate().after(new Date())){
+            if (user.getVerificationTokenExpiryDate().after(new Date())) {
                 user.setEnabled(true);
                 userRepository.save(user);
                 return true;

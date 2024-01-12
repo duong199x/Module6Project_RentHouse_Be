@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
@@ -21,12 +22,13 @@ public class User implements Serializable {
     private Long id;
 
     @Column(unique = true, nullable = false)
+    @Pattern(regexp = "[a-zA-Z0-9_.]*")
     private String username;
 
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Transient
     private String confirmPassword;
     @Column(nullable = false, unique = true)
     @Email(message = "Email không hợp lệ")
@@ -34,7 +36,8 @@ public class User implements Serializable {
     private String fullName;
     private String address;
     private String phone;
-    private int age;
+    @Column(nullable = true)
+    private Integer age;
     private String dateOfBirth;
     private String imageUser;
     @Column(columnDefinition = "int default 0")
@@ -46,13 +49,6 @@ public class User implements Serializable {
     private boolean deleteFlag;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id")})
+    @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<Role> roles;
-
-    public User() {
-    }
-
-
 }

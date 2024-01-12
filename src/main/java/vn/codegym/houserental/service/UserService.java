@@ -1,5 +1,6 @@
 package vn.codegym.houserental.service;
 
+import vn.codegym.houserental.exception.CommonException;
 import vn.codegym.houserental.model.account.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -7,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import java.util.Optional;
 
 public interface UserService extends UserDetailsService {
-    void save(User user);
+    void save(User user) throws CommonException;
 
     Iterable<User> findAll();
 
