@@ -10,5 +10,7 @@ public class Constants {
         //put vào mã message và message
         SystemMessage.put("MS-HO-01", "Create house success");
         SystemMessage.put("ER-HO-01", "Create house fail");
+        SystemMessage.put("MS-LO-01", "Đăng xuất thành công");
+
     }
 }

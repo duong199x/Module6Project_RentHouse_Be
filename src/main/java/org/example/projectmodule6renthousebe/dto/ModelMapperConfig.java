@@ -1,5 +1,6 @@
 package org.example.projectmodule6renthousebe.dto;
 
+import org.example.projectmodule6renthousebe.utils.CustomHouseDTOConverter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,7 @@ public class ModelMapperConfig {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration()
                 .setMatchingStrategy(MatchingStrategies.STRICT);
+        modelMapper.addConverter(new CustomHouseDTOConverter());
         return modelMapper;
     }
 
