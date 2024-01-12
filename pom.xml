@@ -8,12 +8,12 @@
 		<version>3.2.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>org.example</groupId>
-	<artifactId>projectmodule6renthouseBe</artifactId>
+	<groupId>vn.codegym</groupId>
+	<artifactId>houserental</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>projectmodule6renthouseBe</name>
-	<description>projectmodule6renthouseBe</description>
+	<name>houserental</name>
+	<description>Du an cho thue nha</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
