@@ -4,9 +4,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
 import org.example.projectmodule6renthousebe.model.Category;
+import org.example.projectmodule6renthousebe.model.Convenient;
 import org.example.projectmodule6renthousebe.model.account.User;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 public class CreateHouseRequest {
@@ -21,4 +23,5 @@ public class CreateHouseRequest {
     private User user;
     private Category category;
     private List<String> images;
+    private List<Long> convenientIds;
 }

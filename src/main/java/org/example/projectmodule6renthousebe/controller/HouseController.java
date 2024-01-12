@@ -30,6 +30,7 @@ public class HouseController {
     @Autowired
     private ModelMapperUtil mapperUtil;
 
+
     @GetMapping("")
     public ResponseEntity<List<HouseDTO>> showAll() {
         List<House> house = (List<House>) houseService.findAllByDeleteFlag(false);
@@ -101,18 +102,18 @@ public class HouseController {
         return new ResponseEntity<>(houses, HttpStatus.OK);
     }
 
-    @PostMapping("/{houseId}/addConvenient")
-    public ResponseEntity<String> addConvenientsToHouse(
-            @PathVariable Long houseId,
-            @RequestBody List<Long> convenientIds
-    ) {
-        try {
-            houseService.addConvenientsToHouse(houseId, convenientIds);
-            return ResponseEntity.ok("Convenients added to house successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Error adding convenients to house: " + e.getMessage());
-        }
-    }
+//    @PostMapping("/{houseId}/addConvenient")
+//    public ResponseEntity<String> addConvenientsToHouse(
+//            @PathVariable Long houseId,
+//            @RequestBody List<Long> convenientIds
+//    ) {
+//        try {
+//            houseService.addConvenientsToHouse(houseId, convenientIds);
+//            return ResponseEntity.ok("Convenients added to house successfully");
+//        } catch (Exception e) {
+//            return ResponseEntity.status(500).body("Error adding convenients to house: " + e.getMessage());
+//        }
+//    }
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<HouseDTO>> getAllByUserId(@PathVariable Long userId) {

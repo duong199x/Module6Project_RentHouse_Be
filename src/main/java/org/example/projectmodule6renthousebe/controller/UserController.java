@@ -7,6 +7,7 @@ import org.example.projectmodule6renthousebe.dto.UserDTO;
 import org.example.projectmodule6renthousebe.model.account.JwtResponse;
 import org.example.projectmodule6renthousebe.model.account.Role;
 import org.example.projectmodule6renthousebe.model.account.User;
+import org.example.projectmodule6renthousebe.response.VerifyTokenResponse;
 import org.example.projectmodule6renthousebe.service.RoleService;
 import org.example.projectmodule6renthousebe.service.UserService;
 import org.example.projectmodule6renthousebe.service.impl.JwtService;
@@ -181,5 +182,15 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+    @GetMapping("/verify")
+    public ResponseEntity<VerifyTokenResponse> activateAccount(@RequestParam String token) {
+        boolean activationResult = userService.activateUserAccount(token);
+
+        if (activationResult) {
+            return new ResponseEntity<>(new VerifyTokenResponse(true,"MS-VR-01"),HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new VerifyTokenResponse(false,"ER-VR-01"),HttpStatus.BAD_REQUEST);
+        }
     }
 }

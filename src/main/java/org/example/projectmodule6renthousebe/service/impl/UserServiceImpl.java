@@ -12,7 +12,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -52,6 +58,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public User findByVerificationToken(String token) {
+        return userRepository.findByVerificationToken(token);
     }
 
     @Override
@@ -116,5 +132,31 @@ public class UserServiceImpl implements UserService {
     @Override
     public Iterable<User> searchUserByName(String name) {
         return userRepository.findByUsernameContaining(name);
+    }
+    @Override
+    public String generateVerificationToken(User user) {
+        String token = UUID.randomUUID().toString();
+        user.setVerificationToken(token);
+        user.setEnabled(false);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.HOUR, 24);
+        user.setVerificationTokenExpiryDate(calendar.getTime());
+        userRepository.save(user);
+        return token;
+    }
+
+    @Override
+    public boolean activateUserAccount(String token) {
+        User user = userRepository.findByVerificationToken(token);
+        if (user != null && !user.isEnabled()) {
+            if(user.getVerificationTokenExpiryDate().after(new Date())){
+                user.setEnabled(true);
+                userRepository.save(user);
+                return true;
+            }
+            return false;
+        }
+
+        return false;
     }
 }
