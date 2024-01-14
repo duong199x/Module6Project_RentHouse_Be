@@ -9,6 +9,7 @@ public class Constants {
         SystemMessage = new HashMap<>();
 
         //put vào mã message và message
+        SystemMessage.put("MS-LO-01", "Đăng xuất thành công");
         //Danh cho House
         SystemMessage.put("MS-HO-01", "Dang nha thanh cong");
         SystemMessage.put("ER-HO-01", "Create house fail");

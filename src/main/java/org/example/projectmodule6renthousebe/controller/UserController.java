@@ -1,6 +1,7 @@
 package org.example.projectmodule6renthousebe.controller;
 
 import org.example.projectmodule6renthousebe.dto.JwtDTO;
+import org.example.projectmodule6renthousebe.requests.LogoutResponse;
 import org.example.projectmodule6renthousebe.requests.PasswordRequest;
 import org.example.projectmodule6renthousebe.dto.UserDTO;
 import org.example.projectmodule6renthousebe.model.account.JwtResponse;
@@ -159,6 +160,12 @@ public class UserController {
         } else {
             return new ResponseEntity<>(modelMapperUtil.mapList(userList, UserDTO.class), HttpStatus.OK);
         }
+    }
+
+    @GetMapping("/users/logout")
+    public ResponseEntity<?> logout() {
+        SecurityContextHolder.getContext().setAuthentication(null);
+        return new ResponseEntity<>(new LogoutResponse(true, "MS-LO-01"), HttpStatus.OK);
     }
 
     @PatchMapping("/users/change-password")
