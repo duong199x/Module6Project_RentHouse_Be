@@ -69,13 +69,6 @@ public class HouseController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-//    @PutMapping("/update/{id}")
-//    public ResponseEntity<House> update(@PathVariable Long id, @RequestBody House house) {
-//        house.setId(id);
-//        houseService.save(house);
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
-
     @GetMapping("/{id}")
     public ResponseEntity<Optional<House>> findById(@PathVariable Long id) {
         Optional<House> house = houseService.findOneById(id);
