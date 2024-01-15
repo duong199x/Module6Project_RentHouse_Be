@@ -1,6 +1,4 @@
-package org.example.projectmodule6renthousebe.requests;
-
-import org.example.projectmodule6renthousebe.response.BaseResponse;
+package vn.codegym.houserental.response;
 
 public class LogoutResponse extends BaseResponse {
     public LogoutResponse(boolean success, String messageCode) {
