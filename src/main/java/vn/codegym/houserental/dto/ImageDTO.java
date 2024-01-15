@@ -1,6 +1,5 @@
-package org.example.projectmodule6renthousebe.dto;
+package vn.codegym.houserental.dto;
 
-import jakarta.persistence.Column;
 import lombok.Data;
 
 @Data

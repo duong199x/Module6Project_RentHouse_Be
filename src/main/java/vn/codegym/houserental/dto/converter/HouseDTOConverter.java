@@ -1,13 +1,13 @@
-package org.example.projectmodule6renthousebe.utils;
+package vn.codegym.houserental.dto.converter;
 
-import org.example.projectmodule6renthousebe.dto.HouseDTO;
-import org.example.projectmodule6renthousebe.dto.UserDTO;
-import org.example.projectmodule6renthousebe.model.House;
 import org.modelmapper.Converter;
+import vn.codegym.houserental.dto.HouseDTO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.spi.MappingContext;
+import vn.codegym.houserental.dto.UserDTO;
+import vn.codegym.houserental.model.House;
 
-public class CustomHouseDTOConverter implements Converter<House, HouseDTO> {
+public class HouseDTOConverter implements Converter<House, HouseDTO> {
 
     @Override
     public HouseDTO convert(MappingContext<House, HouseDTO> mappingContext) {
