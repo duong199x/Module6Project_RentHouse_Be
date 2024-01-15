@@ -64,8 +64,6 @@ public class ImageServiceImpl implements ImageService{
             image.setHouse(house);
             imageRepository.save(image);
         }
-
-        // Lấy danh sách ảnh đã được thêm vào nhà
         return imageRepository.findAllByHouseIdAndDeleteFlag(houseId,false);
     }
 }
