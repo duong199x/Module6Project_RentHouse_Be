@@ -9,9 +9,6 @@ import vn.codegym.houserental.utils.Constants;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BaseResponse {
-    @Getter
-    @JsonIgnore
-    public boolean success;
 
     @JsonIgnore
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = MessageCodeFilter.class)
@@ -19,13 +16,8 @@ public class BaseResponse {
 
     public String message;
 
-    public BaseResponse(boolean success, String messageCode) {
-        this.success = success;
+    public BaseResponse(String messageCode) {
         this.messageCode = messageCode;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
     }
 
     public void setMessageCode(String messageCode) {

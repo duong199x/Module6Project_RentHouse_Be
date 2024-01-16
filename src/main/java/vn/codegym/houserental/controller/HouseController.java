@@ -46,9 +46,9 @@ public class HouseController {
             House saveHouse = houseService.save(request);
             List<String> imageList = request.getImages();
             houseService.saveImageListAsync(saveHouse, imageList);
-            return new ResponseEntity<>(new CreateHouseResponse(true, "MS-HO-01"), HttpStatus.OK);
+            return new ResponseEntity<>(new CreateHouseResponse("MS-HO-01"), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(new CreateHouseResponse(false, "ER-HO-01"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new CreateHouseResponse("ER-HO-01"), HttpStatus.BAD_REQUEST);
         }
     }
     @PutMapping("/update/{id}")
@@ -56,9 +56,9 @@ public class HouseController {
         try {
             request.setId(id);
             houseService.save(request);
-            return new ResponseEntity<>(new CreateHouseResponse(true, "MS-HO-01"), HttpStatus.OK);
+            return new ResponseEntity<>(new CreateHouseResponse("MS-HO-01"), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(new CreateHouseResponse(false, "ER-HO-01"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new CreateHouseResponse("ER-HO-01"), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -66,10 +66,10 @@ public class HouseController {
     public ResponseEntity<DeleteHouseResponse> delete(@PathVariable Long id) {
         try {
             houseService.delete(id);
-            return new ResponseEntity<>(new DeleteHouseResponse(true, "MS-H3-01"), HttpStatus.OK);
+            return new ResponseEntity<>(new DeleteHouseResponse("MS-H3-01"), HttpStatus.OK);
         }
         catch (Exception e){
-            return new ResponseEntity<>(new DeleteHouseResponse(true, "ER-H3-01"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new DeleteHouseResponse("ER-H3-01"), HttpStatus.BAD_REQUEST);
         }
 
     }
