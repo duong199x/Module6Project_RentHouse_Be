@@ -30,6 +30,7 @@ import java.util.Set;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/auth")
+@CrossOrigin("*")
 public class AuthController {
 
     @Autowired
