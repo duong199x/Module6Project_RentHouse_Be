@@ -2,12 +2,15 @@ package vn.codegym.houserental.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import vn.codegym.houserental.model.account.User;
 
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class House {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +20,7 @@ public class House {
     @Column(nullable = false)
     private String description;
     @Column(nullable = false)
-    private double price;
+    private double pricePerNight;
     @Column(nullable = false)
     private String location;
     @Column(nullable = false)
@@ -29,6 +32,9 @@ public class House {
     @Column(nullable = false)
     private int kitchen;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private HouseStatus status;
 
     @ManyToOne
     private Category category;
