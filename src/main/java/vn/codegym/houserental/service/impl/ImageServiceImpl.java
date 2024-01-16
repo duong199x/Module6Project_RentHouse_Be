@@ -66,4 +66,10 @@ public class ImageServiceImpl implements ImageService{
         }
         return imageRepository.findAllByHouseIdAndDeleteFlag(houseId,false);
     }
+
+    @Override
+    public Image getImageByHouseId(Long houseId) {
+        List<Image> images = (List<Image>) findAllByHouseIdAndDeleteFlag(houseId,false);
+       return images.get(0);
+    }
 }

@@ -16,4 +16,4 @@ spring:
     username: ${MYSQL_USERNAME:root}
     url: jdbc:mysql://localhost:3306/${MYSQL_DATABASE:larente}?createDatabaseIfNotExist=true
 server:
-  port: ${port:8081}
+  port: ${port:8080}

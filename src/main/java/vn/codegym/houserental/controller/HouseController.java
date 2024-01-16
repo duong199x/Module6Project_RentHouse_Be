@@ -42,7 +42,7 @@ public class HouseController {
     @PostMapping("/create")
     public ResponseEntity<CreateHouseResponse> save(@RequestBody CreateHouseRequest request) {
         try {
-            House saveHouse = houseService.save(request);
+            House saveHouse = houseService.saveOrUpdateHouse(request);
             List<String> imageList = request.getImages();
             houseService.saveImageListAsync(saveHouse, imageList);
             return new ResponseEntity<>(new CreateHouseResponse(true, "MS-HO-01"), HttpStatus.OK);
@@ -50,11 +50,11 @@ public class HouseController {
             return new ResponseEntity<>(new CreateHouseResponse(false, "ER-HO-01"), HttpStatus.BAD_REQUEST);
         }
     }
-    @PutMapping("/update/{id}")
+    @PatchMapping("/update/{id}")
     public ResponseEntity<CreateHouseResponse> update(@PathVariable Long id, @RequestBody CreateHouseRequest request) {
         try {
             request.setId(id);
-            houseService.save(request);
+            houseService.saveOrUpdateHouse(request);
             return new ResponseEntity<>(new CreateHouseResponse(true, "MS-HO-01"), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new CreateHouseResponse(false, "ER-HO-01"), HttpStatus.BAD_REQUEST);
@@ -102,20 +102,6 @@ public class HouseController {
         Page<House> houses = houseService.findAllByCategoryId(pageable, categoriesId);
         return new ResponseEntity<>(houses, HttpStatus.OK);
     }
-
-//    @PostMapping("/{houseId}/addConvenient")
-//    public ResponseEntity<String> addConvenientsToHouse(
-//            @PathVariable Long houseId,
-//            @RequestBody List<Long> convenientIds
-//    ) {
-//        try {
-//            houseService.addConvenientsToHouse(houseId, convenientIds);
-//            return ResponseEntity.ok("Convenients added to house successfully");
-//        } catch (Exception e) {
-//            return ResponseEntity.status(500).body("Error adding convenients to house: " + e.getMessage());
-//        }
-//    }
-
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<HouseDTO>> getAllByUserId(@PathVariable Long userId) {
         List<House> house = (List<House>) houseService.findAllByUserIdAndDeleteFlag(userId, false);
