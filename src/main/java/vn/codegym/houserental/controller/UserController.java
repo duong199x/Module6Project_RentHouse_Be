@@ -120,7 +120,7 @@ public class UserController {
             String newPassword = passwordEncoder.encode(passwordRequest.getPassword());
             currentUser.setPassword(newPassword);
             currentUser.setConfirmPassword(newPassword);
-            userService.save(currentUser);
+            userService.saveUpdate(currentUser);
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
