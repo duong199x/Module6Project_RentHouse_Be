@@ -71,8 +71,8 @@ public class UserController {
         user1.setAge(user.getAge());
         user1.setDateOfBirth(user.getDateOfBirth());
         user1.setEmail(user.getEmail());
-        user1.setImageUser(user1.getImageUser());
-        userService.save(user1);
+        user1.setImageUser(user.getImageUser());
+        userService.saveUpdate(user1);
         return new ResponseEntity<>(modelMapperUtil.map(user, UserDTO.class), HttpStatus.OK);
     }
 
