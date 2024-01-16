@@ -4,6 +4,7 @@ import vn.codegym.houserental.dto.HouseDTO;
 import vn.codegym.houserental.model.House;
 import vn.codegym.houserental.requests.CreateHouseRequest;
 import vn.codegym.houserental.response.CreateHouseResponse;
+import vn.codegym.houserental.response.DeleteHouseResponse;
 import vn.codegym.houserental.service.impl.HouseServiceImpl;
 import vn.codegym.houserental.utils.ModelMapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,13 +63,13 @@ public class HouseController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<House> delete(@PathVariable Long id) {
+    public ResponseEntity<DeleteHouseResponse> delete(@PathVariable Long id) {
         try {
             houseService.delete(id);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(new DeleteHouseResponse(true, "MS-H3-01"), HttpStatus.OK);
         }
         catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new DeleteHouseResponse(true, "ER-H3-01"), HttpStatus.BAD_REQUEST);
         }
 
     }
