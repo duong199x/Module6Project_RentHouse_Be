@@ -4,6 +4,7 @@ import vn.codegym.houserental.dto.HouseDTO;
 import vn.codegym.houserental.model.House;
 import vn.codegym.houserental.requests.CreateHouseRequest;
 import vn.codegym.houserental.response.CreateHouseResponse;
+import vn.codegym.houserental.response.DeleteHouseResponse;
 import vn.codegym.houserental.service.impl.HouseServiceImpl;
 import vn.codegym.houserental.utils.ModelMapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,26 +46,32 @@ public class HouseController {
             House saveHouse = houseService.saveOrUpdateHouse(request);
             List<String> imageList = request.getImages();
             houseService.saveImageListAsync(saveHouse, imageList);
-            return new ResponseEntity<>(new CreateHouseResponse(true, "MS-HO-01"), HttpStatus.OK);
+            return new ResponseEntity<>(new CreateHouseResponse("MS-HO-01"), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(new CreateHouseResponse(false, "ER-HO-01"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new CreateHouseResponse("ER-HO-01"), HttpStatus.BAD_REQUEST);
         }
     }
     @PatchMapping("/update/{id}")
     public ResponseEntity<CreateHouseResponse> update(@PathVariable Long id, @RequestBody CreateHouseRequest request) {
         try {
             request.setId(id);
-            houseService.saveOrUpdateHouse(request);
-            return new ResponseEntity<>(new CreateHouseResponse(true, "MS-HO-01"), HttpStatus.OK);
+            houseService.saveOrUpdateHouse(request);       
+            return new ResponseEntity<>(new CreateHouseResponse("MS-HO-01"), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(new CreateHouseResponse(false, "ER-HO-01"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new CreateHouseResponse("ER-HO-01"), HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<House> delete(@PathVariable Long id) {
-        houseService.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<DeleteHouseResponse> delete(@PathVariable Long id) {
+        try {
+            houseService.delete(id);
+            return new ResponseEntity<>(new DeleteHouseResponse("MS-H3-01"), HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(new DeleteHouseResponse("ER-H3-01"), HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @GetMapping("/{id}")

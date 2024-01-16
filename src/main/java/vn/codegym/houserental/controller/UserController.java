@@ -71,8 +71,8 @@ public class UserController {
         user1.setAge(user.getAge());
         user1.setDateOfBirth(user.getDateOfBirth());
         user1.setEmail(user.getEmail());
-        user1.setImageUser(user1.getImageUser());
-        userService.save(user1);
+        user1.setImageUser(user.getImageUser());
+        userService.saveUpdate(user1);
         return new ResponseEntity<>(modelMapperUtil.map(user, UserDTO.class), HttpStatus.OK);
     }
 
@@ -107,7 +107,7 @@ public class UserController {
     @GetMapping("/users/logout")
     public ResponseEntity<?> logout() {
         SecurityContextHolder.getContext().setAuthentication(null);
-        return new ResponseEntity<>(new LogoutResponse(true, "MS-LO-01"), HttpStatus.OK);
+        return new ResponseEntity<>(new LogoutResponse("MS-LO-01"), HttpStatus.OK);
     }
 
     @PatchMapping("/users/change-password")
@@ -131,9 +131,9 @@ public class UserController {
         boolean activationResult = userService.activateUserAccount(token);
 
         if (activationResult) {
-            return new ResponseEntity<>(new VerifyTokenResponse(true, "MS-VR-01"), HttpStatus.OK);
+            return new ResponseEntity<>(new VerifyTokenResponse("MS-VR-01"), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(new VerifyTokenResponse(false, "ER-VR-01"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new VerifyTokenResponse("ER-VR-01"), HttpStatus.BAD_REQUEST);
         }
     }
 }

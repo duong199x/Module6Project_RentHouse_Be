@@ -46,6 +46,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void saveUpdate(User user) throws CommonException {
+        userRepository.save(user);
+    }
+
+    @Override
     public Iterable<User> findAll() {
         return userRepository.findAll();
     }

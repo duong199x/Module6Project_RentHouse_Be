@@ -15,6 +15,8 @@ public class Constants {
         //Danh cho House
         SystemMessage.put("MS-HO-01", "Dang nha thanh cong");
         SystemMessage.put("ER-HO-01", "Create house fail");
+        SystemMessage.put("MS-H3-01","Xóa nhà thành công");
+        SystemMessage.put("ER-H3-01","Xóa nhà thất bại");
 
         //Danh cho User
         SystemMessage.put("MS-US-01", "Register succeed");
