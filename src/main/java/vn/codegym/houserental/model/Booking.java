@@ -22,6 +22,8 @@ public class Booking {
 
     @Column
     private Date startDate;
+    @Column
+    private Date createAt;
 
     @Column
     private Date endDate;
@@ -38,4 +40,6 @@ public class Booking {
     private House house;
 
     private Double price;
+    @Column(columnDefinition = "tinyint default 0")
+    private boolean deleteFlag;
 }
