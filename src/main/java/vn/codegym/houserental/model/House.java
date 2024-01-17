@@ -28,8 +28,9 @@ public class House {
     private int livingRoom;
     @Column(nullable = false)
     private int kitchen;
-
-
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private HouseStatus status;
     @ManyToOne
     private Category category;
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
