@@ -71,7 +71,6 @@ public class HouseController {
         catch (Exception e){
             return new ResponseEntity<>(new DeleteHouseResponse("ER-H3-01"), HttpStatus.BAD_REQUEST);
         }
-
     }
 
     @GetMapping("/{id}")

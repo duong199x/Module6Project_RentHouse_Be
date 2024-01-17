@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import vn.codegym.houserental.model.account.User;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -23,7 +25,7 @@ public class Booking {
     @Column
     private Date startDate;
     @Column
-    private Date createAt;
+    private LocalDateTime createAt;
 
     @Column
     private Date endDate;

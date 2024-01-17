@@ -13,7 +13,6 @@ public class BookingRequest {
     private Date startDate;
 
     private Date endDate;
-    private Date createAt;
 
     private Integer numberOfGuests;
 
