@@ -2,6 +2,7 @@ package vn.codegym.houserental.controller;
 
 import vn.codegym.houserental.dto.HouseDTO;
 import vn.codegym.houserental.model.House;
+import vn.codegym.houserental.model.HouseStatus;
 import vn.codegym.houserental.requests.CreateHouseRequest;
 import vn.codegym.houserental.response.CreateHouseResponse;
 import vn.codegym.houserental.response.DeleteHouseResponse;
@@ -125,6 +126,9 @@ public class HouseController {
         }
         return new ResponseEntity<>(mapperUtil.mapList(house, HouseDTO.class), HttpStatus.OK);
     }
+
+
+
 
 
 }
