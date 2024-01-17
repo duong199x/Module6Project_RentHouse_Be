@@ -154,4 +154,6 @@ public class HouseServiceImpl implements HouseService {
     public Iterable<House> findByNameContainsIgnoreCaseAndDeleteFlag(String name, boolean deleteFlag) {
         return houseRepository.findByNameContainsIgnoreCaseAndDeleteFlag(name, deleteFlag);
     }
+
+
 }

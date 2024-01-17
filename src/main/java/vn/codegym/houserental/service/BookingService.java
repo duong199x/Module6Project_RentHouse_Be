@@ -82,4 +82,8 @@ public class BookingService {
             }
         }
     }
+    public Iterable<Booking> findAllByHouseId(Long houseId,boolean deleteFlag){
+        return bookingRepository.findAllByUserIdAndDeleteFlag(houseId,deleteFlag);
+    }
+
     }
