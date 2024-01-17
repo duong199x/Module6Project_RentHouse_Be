@@ -4,6 +4,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import vn.codegym.houserental.exception.CommonException;
 import vn.codegym.houserental.model.Booking;
+import vn.codegym.houserental.model.BookingStatus;
 import vn.codegym.houserental.model.House;
 import vn.codegym.houserental.model.account.User;
 import vn.codegym.houserental.repository.BookingRepository;
@@ -29,7 +30,7 @@ public class BookingService {
     }
 
     public Booking save(BookingRequest request) throws CommonException {
-        if (request.getStartDate() == null) {
+        if (request.getStartDate() == null || request.getEndDate() == null) {
             throw new CommonException("Ngày đặt phòng không được để trống");
         }
         Booking booking = new Booking();
@@ -40,10 +41,11 @@ public class BookingService {
         booking.setStartDate(request.getStartDate());
         booking.setEndDate(request.getEndDate());
         booking.setPrice(request.getPrice());
+        booking.setCreateAt(request.getCreateAt());
         booking.setNumberOfGuests(request.getNumberOfGuests());
         booking.setHouse(house);
         booking.setUser(user);
-        booking.setStatus(request.getStatus());
+        booking.setStatus(BookingStatus.IN_PROGRESS);
         return bookingRepository.save(booking);
     }
 

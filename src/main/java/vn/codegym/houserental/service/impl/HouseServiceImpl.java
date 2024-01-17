@@ -3,6 +3,7 @@ package vn.codegym.houserental.service.impl;
 import jakarta.persistence.EntityNotFoundException;
 import vn.codegym.houserental.model.Convenient;
 import vn.codegym.houserental.model.House;
+import vn.codegym.houserental.model.HouseStatus;
 import vn.codegym.houserental.model.Image;
 import vn.codegym.houserental.repository.ConvenientRepository;
 import vn.codegym.houserental.repository.HouseRepository;
@@ -62,6 +63,7 @@ public class HouseServiceImpl implements HouseService {
     private House saveNewHouse(CreateHouseRequest request) {
         House house = new House();
         setCommonHouseProperties(house,request);
+        house.setStatus(HouseStatus.AVAILABLE);
         return houseRepository.save(house);
     }
     private House updateExistingHouse(CreateHouseRequest request) {
@@ -92,11 +94,12 @@ public class HouseServiceImpl implements HouseService {
         house.setBedRoom(request.getBedRoom());
         house.setDescription(request.getDescription());
         house.setKitchen(request.getKitchen());
-        house.setPricePerNight(request.getPrice());
+        house.setPrice(request.getPrice());
         house.setUser(request.getUser());
         house.setLocation(request.getLocation());
         house.setBathRoom(request.getBathRoom());
         house.setLivingRoom(request.getLivingRoom());
+
 
         // Set convenients
         house.setConvenients(getConvenientsFromRequest(request.getConvenientIds()));
