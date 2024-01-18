@@ -20,7 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/booking")
+@CrossOrigin("*")
+@RequestMapping ("/booking")
 public class BookingController {
 
     @Autowired
