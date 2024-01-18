@@ -4,6 +4,7 @@ import vn.codegym.houserental.dto.HouseDTO;
 import vn.codegym.houserental.model.House;
 import vn.codegym.houserental.model.HouseStatus;
 import vn.codegym.houserental.requests.CreateHouseRequest;
+import vn.codegym.houserental.requests.SearchRequest;
 import vn.codegym.houserental.response.CreateHouseResponse;
 import vn.codegym.houserental.response.DeleteHouseResponse;
 import vn.codegym.houserental.service.impl.HouseServiceImpl;
@@ -118,9 +119,9 @@ public class HouseController {
         return new ResponseEntity<>(mapperUtil.mapList(house, HouseDTO.class), HttpStatus.OK);
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<List<HouseDTO>> searchByName(@RequestParam String name) {
-        List<House> house = (List<House>) houseService.findByNameContainsIgnoreCaseAndDeleteFlag(name, false);
+    @PostMapping("/search")
+    public ResponseEntity<List<HouseDTO>> searchByCondition(@RequestBody SearchRequest request) {
+        List<House> house =  houseService.findByCondition(request);
         if (house.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

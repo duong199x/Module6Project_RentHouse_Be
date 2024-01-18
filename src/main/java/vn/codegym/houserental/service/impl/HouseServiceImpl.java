@@ -8,6 +8,7 @@ import vn.codegym.houserental.model.Image;
 import vn.codegym.houserental.repository.ConvenientRepository;
 import vn.codegym.houserental.repository.HouseRepository;
 import vn.codegym.houserental.requests.CreateHouseRequest;
+import vn.codegym.houserental.requests.SearchRequest;
 import vn.codegym.houserental.service.HouseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -152,8 +153,11 @@ public class HouseServiceImpl implements HouseService {
 
     @Override
     public Iterable<House> findByNameContainsIgnoreCaseAndDeleteFlag(String name, boolean deleteFlag) {
-        return houseRepository.findByNameContainsIgnoreCaseAndDeleteFlag(name, deleteFlag);
+        return houseRepository.findByNameContainsIgnoreCaseAndDeleteFlag(name,deleteFlag);
     }
 
-
+    @Override
+    public List<House> findByCondition(SearchRequest request) {
+        return houseRepository.findHousesByCriteria(request.getName(), request.getLocation(), request.getCategoryId(), request.getMinPrice(), request.getMaxPrice(), request.getConvenientIds().isEmpty()? null: request.getConvenientIds(), false);
+    }
 }
