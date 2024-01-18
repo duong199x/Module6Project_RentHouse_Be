@@ -4,7 +4,6 @@ import vn.codegym.houserental.model.House;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import vn.codegym.houserental.requests.SearchRequest;
-
 import java.util.List;
 
 public interface HouseService extends IGenerateService<House> {

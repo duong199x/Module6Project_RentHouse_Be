@@ -63,19 +63,21 @@ public class HouseServiceImpl implements HouseService {
 
     private House saveNewHouse(CreateHouseRequest request) {
         House house = new House();
-        setCommonHouseProperties(house,request);
+        setCommonHouseProperties(house, request);
         house.setStatus(HouseStatus.AVAILABLE);
         return houseRepository.save(house);
     }
+
     private House updateExistingHouse(CreateHouseRequest request) {
         Long houseId = request.getId();
         House house = houseRepository.findById(houseId)
                 .orElseThrow(() -> new EntityNotFoundException("House with id " + houseId + " not found."));
         // Update properties for an existing house
-        setCommonHouseProperties(house,request);
+        setCommonHouseProperties(house, request);
 
         return houseRepository.save(house);
     }
+
     private Set<Convenient> getConvenientsFromRequest(List<Long> convenientIds) {
         Set<Convenient> convenients = new HashSet<>();
         if (convenientIds != null && !convenientIds.isEmpty()) {
@@ -107,31 +109,6 @@ public class HouseServiceImpl implements HouseService {
     }
 
 
-
-    //    public House save(CreateHouseRequest request) {
-//
-//        House house = new House();
-//        house.setName(request.getName());
-//        house.setCategory(request.getCategory());
-//        house.setBedRoom(request.getBedRoom());
-//        house.setDescription(request.getDescription());
-//        house.setKitchen(request.getKitchen());
-//        house.setPrice(request.getPrice());
-//        house.setUser(request.getUser());
-//        house.setLocation(request.getLocation());
-//        house.setBathRoom(request.getBathRoom());
-//        house.setLivingRoom(request.getLivingRoom());
-//        Set<Convenient> newConvenients = new HashSet<>();
-//        if (request.getConvenientIds() != null && !request.getConvenientIds().isEmpty()) {
-//            for (Long convenientId : request.getConvenientIds()) {
-//                Convenient convenient = convenientRepository.findById(convenientId)
-//                        .orElseThrow(() -> new EntityNotFoundException("Convenient with id " + convenientId + " not found."));
-//                newConvenients.add(convenient);
-//            }
-//        }
-//        house.setConvenients(newConvenients);
-//        return houseRepository.save(house);
-//    }
     @Async
     public CompletableFuture<Void> saveImageListAsync(House house, List<String> imageList) {
         imageList.forEach(image -> {
@@ -143,6 +120,7 @@ public class HouseServiceImpl implements HouseService {
 
         return CompletableFuture.completedFuture(null);
     }
+
     @Override
     public void delete(Long id) {
         Optional<House> house = houseRepository.findById(id);
@@ -170,7 +148,7 @@ public class HouseServiceImpl implements HouseService {
 
     @Override
     public Iterable<House> findAllByUserIdAndDeleteFlag(Long userId, boolean deleteFlag) {
-        return houseRepository.findAllByUserIdAndDeleteFlag(userId,deleteFlag);
+        return houseRepository.findAllByUserIdAndDeleteFlag(userId, deleteFlag);
     }
 
     @Override
@@ -182,18 +160,4 @@ public class HouseServiceImpl implements HouseService {
     public List<House> findByCondition(SearchRequest request) {
         return houseRepository.findHousesByCriteria(request.getName(), request.getLocation(), request.getCategoryId(), request.getMinPrice(), request.getMaxPrice(), request.getConvenientIds().isEmpty()? null: request.getConvenientIds(), false);
     }
-
-//    @Transactional
-//    public void addConvenientsToHouse(Long houseId, List<Long> convenientIds) {
-//        Optional<House> houseOptional = houseRepository.findById(houseId);
-//        if (houseOptional.isPresent()) {
-//            House house = houseOptional.get();
-//            Set<Convenient> convenients = house.getConvenients();
-//            convenients.addAll(convenient.findAllById(convenientIds));
-//
-//            houseRepository.save(house);
-//        } else {
-//            throw new RuntimeException("House not found");
-//        }
-//    }
 }
