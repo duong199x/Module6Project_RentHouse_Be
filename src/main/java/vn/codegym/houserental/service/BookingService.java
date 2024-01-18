@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -86,4 +87,18 @@ public class BookingService {
         return bookingRepository.findAllByHouseIdAndDeleteFlag(houseId,deleteFlag);
     }
 
+    public Double getTotalPriceByMonthAndStatus(int month, BookingStatus status,Long userId) {
+        return bookingRepository.getTotalPriceByMonthAndStatusAndUserId(month,status,userId);
     }
+
+
+    public Iterable<Booking> getAllBookingByMonthAndHost(int month,BookingStatus status,Long userId){
+        return bookingRepository.getBookingsByMonthAndStatusAndUserId(month,status,userId);
+    }
+    public Iterable<Booking> getAllBookingByHostId(Long userId){
+        return bookingRepository.findBookingsByUserIdAndNotDeleted(userId);
+    }
+
+
+
+}

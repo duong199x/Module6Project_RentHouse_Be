@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import vn.codegym.houserental.model.BookingStatus;
 import vn.codegym.houserental.model.House;
+import vn.codegym.houserental.model.HouseStatus;
 import vn.codegym.houserental.model.account.User;
 
 import java.time.LocalDate;
@@ -19,4 +20,5 @@ public class BookingDTO {
     private UserDTO user;
     private HouseDTO house;
     private Double price;
+    private HouseStatus status;
 }
