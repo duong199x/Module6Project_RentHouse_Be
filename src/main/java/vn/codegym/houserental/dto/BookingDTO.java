@@ -13,6 +13,7 @@ import java.util.Date;
 
 @Data
 public class BookingDTO {
+    private Long id;
     private LocalDateTime createAt;
     private Date startDate;
     private Date endDate;
@@ -20,5 +21,5 @@ public class BookingDTO {
     private UserDTO user;
     private HouseDTO house;
     private Double price;
-    private HouseStatus status;
+    private BookingStatus status;
 }
