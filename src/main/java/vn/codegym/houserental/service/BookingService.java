@@ -61,8 +61,8 @@ public class BookingService {
         return bookingRepository.save(booking);
     }
 
-    public Iterable<Booking> findAllByUserId(Long userId,boolean deleteFlag){
-        return bookingRepository.findAllByUserIdAndDeleteFlag(userId,deleteFlag);
+    public Iterable<Booking> findAllByUserId(Long userId, boolean deleteFlag) {
+        return bookingRepository.findAllByUserIdAndDeleteFlag(userId, deleteFlag);
     }
 
     public void cancelBooking(Long idBooking) {
@@ -83,22 +83,30 @@ public class BookingService {
             }
         }
     }
-    public Iterable<Booking> findAllByHouseId(Long houseId,boolean deleteFlag){
-        return bookingRepository.findAllByHouseIdAndDeleteFlag(houseId,deleteFlag);
+
+    public Iterable<Booking> findAllByHouseId(Long houseId, boolean deleteFlag) {
+        return bookingRepository.findAllByHouseIdAndDeleteFlag(houseId, deleteFlag);
     }
 
-    public Double getTotalPriceByMonthAndStatus(int month, BookingStatus status,Long userId) {
-        return bookingRepository.getTotalPriceByMonthAndStatusAndUserId(month,status,userId);
+    public Double getTotalPriceByMonthAndStatus(int month, BookingStatus status, Long userId) {
+        return bookingRepository.getTotalPriceByMonthAndStatusAndUserId(month, status, userId);
     }
 
 
-    public Iterable<Booking> getAllBookingByMonthAndHost(int month,BookingStatus status,Long userId){
-        return bookingRepository.getBookingsByMonthAndStatusAndUserId(month,status,userId);
+    public Iterable<Booking> getAllBookingByMonthAndHost(int month, BookingStatus status, Long userId) {
+        return bookingRepository.getBookingsByMonthAndStatusAndUserId(month, status, userId);
     }
-    public Iterable<Booking> getAllBookingByHostId(Long userId){
+
+    public Iterable<Booking> getAllBookingByHostId(Long userId) {
         return bookingRepository.findBookingsByUserIdAndNotDeleted(userId);
     }
 
-
+    public void setCheckIn(Long idBooking) {
+        Optional<Booking> booking = bookingRepository.findById(idBooking);
+        if (booking.isPresent()){
+            booking.get().setStatus(BookingStatus.CHECK_IN);
+            bookingRepository.save(booking.get());
+        }
+    }
 
 }
