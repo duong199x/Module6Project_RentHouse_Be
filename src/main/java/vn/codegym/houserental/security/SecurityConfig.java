@@ -32,7 +32,7 @@ public class SecurityConfig {
     public UserService userService() {
         return new UserServiceImpl();
     }
-
+    
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {

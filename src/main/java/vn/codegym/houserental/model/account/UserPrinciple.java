@@ -13,27 +13,30 @@ public class UserPrinciple implements UserDetails {
     private static final long serialVersionUID = 1L;
 
     private Long id;
-
     private String username;
-
     private String password;
-
     private Collection<? extends GrantedAuthority> roles;
+    private int isOwner;  // New field for isOwner
 
-    public UserPrinciple(Long id, String username, String password, Collection<? extends GrantedAuthority> roles) {
+    public UserPrinciple(Long id, String username, String password, Collection<? extends GrantedAuthority> roles, int isOwner) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.roles = roles;
+        this.isOwner = isOwner;
     }
 
     public static UserPrinciple build(User user) {
-        List<GrantedAuthority> authorities = user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+        List<GrantedAuthority> authorities = user.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
+
         return new UserPrinciple(
                 user.getId(),
                 user.getUsername(),
                 user.getPassword(),
-                authorities
+                authorities,
+                user.getIsOwner() // Set isOwner from the User entity
         );
     }
 
@@ -56,6 +59,9 @@ public class UserPrinciple implements UserDetails {
         return roles;
     }
 
+    public int getIsOwner() {
+        return isOwner;
+    }
 
     @Override
     public boolean isAccountNonExpired() {
@@ -88,6 +94,6 @@ public class UserPrinciple implements UserDetails {
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return Objects.hash(id);
     }
 }
