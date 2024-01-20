@@ -108,5 +108,8 @@ public class BookingService {
             bookingRepository.save(booking.get());
         }
     }
+    public List<Booking> findByUserIdAndHouseIdAndStatusAndDeleteFlag(Long userId, Long houseId){
+        return bookingRepository.findCompletedBookings(userId,houseId,BookingStatus.COMPLETED,false);
+    }
 
 }
