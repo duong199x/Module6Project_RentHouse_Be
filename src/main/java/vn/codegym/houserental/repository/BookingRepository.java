@@ -1,5 +1,6 @@
 package vn.codegym.houserental.repository;
 
+import org.apache.catalina.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -33,6 +34,16 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     @Query("SELECT b FROM Booking b JOIN b.house h WHERE h.user.id = :userId AND b.deleteFlag = false")
     Iterable<Booking> findBookingsByUserIdAndNotDeleted(@Param("userId") Long userId);
+
+    @Query("SELECT b FROM Booking b " +
+            "LEFT JOIN FETCH b.user " +
+            "WHERE b.user.id = :userId " +
+            "AND b.house.id = :houseId " +
+            "AND b.status = :bookingStatus " +
+            "AND b.deleteFlag = :deleteFlag")
+    List<Booking> findCompletedBookings(
+            Long userId, Long houseId, BookingStatus bookingStatus, boolean deleteFlag);
+
 
 
 
