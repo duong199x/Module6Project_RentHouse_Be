@@ -11,6 +11,7 @@ import vn.codegym.houserental.model.Booking;
 import vn.codegym.houserental.model.Comment;
 import vn.codegym.houserental.requests.CommentRequest;
 import vn.codegym.houserental.response.ApiResponse;
+import vn.codegym.houserental.response.bookingresponse.CancelBookingResponse;
 import vn.codegym.houserental.service.BookingService;
 import vn.codegym.houserental.service.CommentService;
 import vn.codegym.houserental.utils.ModelMapperUtil;
@@ -48,6 +49,17 @@ public class CommentController {
             return new ResponseEntity<>(new ApiResponse("99", "Lỗi hệ thống", null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<?> deleteComment(@PathVariable Long commentId) {
+        try {
+            commentService.deleteComment(commentId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(new CancelBookingResponse("ER-B2-02"), HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
 
 }
