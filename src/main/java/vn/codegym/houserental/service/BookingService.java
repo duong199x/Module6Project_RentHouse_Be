@@ -1,6 +1,7 @@
 package vn.codegym.houserental.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import vn.codegym.houserental.exception.CommonException;
@@ -13,6 +14,7 @@ import vn.codegym.houserental.repository.BookingRepository;
 import vn.codegym.houserental.repository.HouseRepository;
 import vn.codegym.houserental.repository.UserRepository;
 import vn.codegym.houserental.requests.BookingRequest;
+import vn.codegym.houserental.response.HistoryResponse;
 import vn.codegym.houserental.service.impl.HouseServiceImpl;
 
 import java.time.LocalDate;
@@ -110,6 +112,10 @@ public class BookingService {
     }
     public List<Booking> findByUserIdAndHouseIdAndStatusAndDeleteFlag(Long userId, Long houseId){
         return bookingRepository.findCompletedBookings(userId,houseId,BookingStatus.COMPLETED,false);
+    }
+
+    public List<HistoryResponse> getHistories(Long userId) {
+        return bookingRepository.getHistories(userId);
     }
 
 }

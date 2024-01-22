@@ -1,12 +1,11 @@
 package vn.codegym.houserental.repository;
 
-import org.apache.catalina.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import vn.codegym.houserental.model.Booking;
 import vn.codegym.houserental.model.BookingStatus;
-import vn.codegym.houserental.model.House;
+import vn.codegym.houserental.response.HistoryResponse;
 
 import java.util.List;
 
@@ -44,8 +43,11 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findCompletedBookings(
             Long userId, Long houseId, BookingStatus bookingStatus, boolean deleteFlag);
 
-
-
-
-
+    @Query("SELECT new vn.codegym.houserental.response.HistoryResponse(c.name, b.price, h.name, h.location, b.createAt, h.user.fullName, b.startDate, b.endDate, b.numberOfGuests, b.status, CASE WHEN cm.id > 0 THEN TRUE ELSE FALSE END) FROM Booking b" +
+            " LEFT JOIN House h ON b.house.id = h.id" +
+            " LEFT JOIN Category c ON h.category.id = c.id" +
+            " LEFT JOIN Comment cm ON h.id = cm.house.id AND cm.user.id = :userId" +
+            " WHERE 1 = 1" +
+            " AND b.user.id = :userId")
+    List<HistoryResponse> getHistories(@Param("userId") Long userId);
 }

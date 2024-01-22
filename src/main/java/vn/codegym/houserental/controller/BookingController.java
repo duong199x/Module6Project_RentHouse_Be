@@ -14,6 +14,7 @@ import vn.codegym.houserental.model.House;
 import vn.codegym.houserental.requests.BookingRequest;
 import vn.codegym.houserental.response.ApiResponse;
 import vn.codegym.houserental.response.DeleteHouseResponse;
+import vn.codegym.houserental.response.HistoryResponse;
 import vn.codegym.houserental.response.bookingresponse.CancelBookingResponse;
 import vn.codegym.houserental.service.BookingService;
 import vn.codegym.houserental.utils.ModelMapperUtil;
@@ -49,6 +50,12 @@ public class BookingController {
         }
         return new ResponseEntity<>(mapperUtil.mapList(bookings, BookingDTO.class), HttpStatus.OK);
     }
+
+    @GetMapping("/histories/{userId}")
+    public ResponseEntity<List<HistoryResponse>> getHistories(@PathVariable Long userId) {
+        return new ResponseEntity<>(bookingService.getHistories(userId), HttpStatus.OK);
+    }
+
     @GetMapping("/house/{houseId}")
     public ResponseEntity<List<BookingDTO>> showAllByHouseId(@PathVariable Long houseId) {
         List<Booking> bookings = (List<Booking>) bookingService.findAllByHouseId(houseId,false);
