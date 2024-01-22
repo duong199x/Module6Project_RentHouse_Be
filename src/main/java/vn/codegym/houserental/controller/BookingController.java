@@ -14,6 +14,7 @@ import vn.codegym.houserental.model.House;
 import vn.codegym.houserental.requests.BookingRequest;
 import vn.codegym.houserental.response.ApiResponse;
 import vn.codegym.houserental.response.DeleteHouseResponse;
+import vn.codegym.houserental.response.bookingresponse.CancelBookingResponse;
 import vn.codegym.houserental.service.BookingService;
 import vn.codegym.houserental.utils.ModelMapperUtil;
 
@@ -58,13 +59,13 @@ public class BookingController {
     }
 
     @DeleteMapping("/{bookingId}")
-    public ResponseEntity<DeleteHouseResponse> cancelBooking(@PathVariable Long bookingId) {
+    public ResponseEntity<CancelBookingResponse> cancelBooking(@PathVariable Long bookingId) {
         try {
             bookingService.cancelBooking(bookingId);
-            return new ResponseEntity<>(new DeleteHouseResponse("MS-B2-01"), HttpStatus.OK);
+            return new ResponseEntity<>(new CancelBookingResponse("MS-B2-01"), HttpStatus.OK);
         }
         catch (Exception e){
-            return new ResponseEntity<>(new DeleteHouseResponse("ER-B2-02"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new CancelBookingResponse("ER-B2-02"), HttpStatus.BAD_REQUEST);
         }
     }
 
