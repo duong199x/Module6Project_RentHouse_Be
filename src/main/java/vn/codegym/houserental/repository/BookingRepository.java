@@ -17,10 +17,25 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     Iterable<Booking> findAllByStatusAndDeleteFlag(BookingStatus status, boolean deleteFlag);
 
     @Query("SELECT SUM(b.price) FROM Booking b " +
-            "WHERE MONTH(b.createAt) = :month AND b.status = :status AND b.house.user.id = :userId AND b.deleteFlag = false ")
+            "WHERE EXTRACT(MONTH FROM b.createAt) = :month " +
+            "AND b.status = :status " +
+            "AND b.house.user.id = :userId " +
+            "AND b.deleteFlag = false")
     Double getTotalPriceByMonthAndStatusAndUserId(@Param("month") int month,
                                                   @Param("status") BookingStatus status,
                                                   @Param("userId") Long userId);
+
+    @Query("SELECT WEEK(b.createAt) as weekNumber, SUM(b.price) as totalAmount " +
+            "FROM Booking b " +
+            "WHERE EXTRACT(MONTH FROM b.createAt) = :month " +
+            "  AND b.status = :status " +
+            "  AND b.house.user.id = :userId " +
+            "  AND b.deleteFlag = false " +
+            "GROUP BY weekNumber " +
+            "ORDER BY 1")
+    List<Object[]> getTotalAmountByWeek(@Param("month") int month,
+                                        @Param("status") BookingStatus status,
+                                        @Param("userId") Long userId);
 
     @Query("SELECT b FROM Booking b " +
             "WHERE MONTH(b.createAt) = :month " +
