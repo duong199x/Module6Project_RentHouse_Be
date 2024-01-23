@@ -10,6 +10,7 @@ import vn.codegym.houserental.repository.HouseRepository;
 import vn.codegym.houserental.repository.UserRepository;
 import vn.codegym.houserental.repository.WishListRepository;
 import vn.codegym.houserental.requests.WishListRequest;
+import vn.codegym.houserental.response.WishlistResponse;
 
 import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
@@ -39,8 +40,8 @@ public class WishListService {
         return wishListRepository.save(wishList);
 
     }
-    public List<WishList> findAllByUserId(Long userId){
-        return wishListRepository.findAllByUserIdAndDeleteFlag(userId,false);
+    public List<WishlistResponse> findAllByUserId(Long userId){
+        return wishListRepository.findAllWishlists(userId);
     }
     public void deleteWishList(Long wishListId) {
         Optional<WishList> wishList = wishListRepository.findById(wishListId);

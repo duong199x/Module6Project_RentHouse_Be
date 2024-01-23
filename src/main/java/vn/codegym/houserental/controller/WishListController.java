@@ -10,6 +10,7 @@ import vn.codegym.houserental.exception.CommonException;
 import vn.codegym.houserental.model.WishList;
 import vn.codegym.houserental.requests.WishListRequest;
 import vn.codegym.houserental.response.ApiResponse;
+import vn.codegym.houserental.response.WishlistResponse;
 import vn.codegym.houserental.response.bookingresponse.CancelBookingResponse;
 import vn.codegym.houserental.service.WishListService;
 import vn.codegym.houserental.utils.ModelMapperUtil;
@@ -27,12 +28,12 @@ public class WishListController {
     private WishListService wishListService;
 
     @GetMapping("{userId}")
-    public ResponseEntity<List<WishListDTO>> showAllByUser(@PathVariable Long userId) {
-        List<WishList> wishLists = wishListService.findAllByUserId(userId);
+    public ResponseEntity<List<WishlistResponse>> showAllByUser(@PathVariable Long userId) {
+        List<WishlistResponse> wishLists = wishListService.findAllByUserId(userId);
         if (wishLists.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(mapperUtil.mapList(wishLists, WishListDTO.class), HttpStatus.OK);
+        return new ResponseEntity<>(wishLists,HttpStatus.OK);
     }
 
     @PostMapping()
