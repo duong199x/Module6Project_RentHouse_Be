@@ -58,7 +58,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findCompletedBookings(
             Long userId, Long houseId, BookingStatus bookingStatus, boolean deleteFlag);
 
-    @Query("SELECT new vn.codegym.houserental.response.HistoryResponse(h.id,c.name, b.price, h.name, h.location, b.createAt, h.user.fullName, b.startDate, b.endDate, b.numberOfGuests, b.status, CASE WHEN cm.id > 0 THEN TRUE ELSE FALSE END) FROM Booking b" +
+    @Query("SELECT new vn.codegym.houserental.response.HistoryResponse(b.id,h.user.id,h.id,c.name, b.price, h.name, h.location, b.createAt, h.user.fullName, b.startDate, b.endDate, b.numberOfGuests, b.status, CASE WHEN cm.id > 0 THEN TRUE ELSE FALSE END) FROM Booking b" +
             " LEFT JOIN House h ON b.house.id = h.id" +
             " LEFT JOIN Category c ON h.category.id = c.id" +
             " LEFT JOIN Comment cm ON h.id = cm.house.id AND cm.user.id = :userId" +
