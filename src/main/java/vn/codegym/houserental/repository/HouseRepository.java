@@ -19,7 +19,6 @@ import java.util.Set;
 public interface HouseRepository extends JpaRepository<House,Long> {
     Iterable<House> findAllByDeleteFlag(boolean deleteFlag);
     Page<House> findAllByCategoryId(Pageable pageable, Long categoriesId);
-//    Page<House> findAllByDeleteFlagAndCategoryId(Pageable pageable, Long categoriesId);
     Iterable<House> findAllByUserIdAndDeleteFlag(Long userId,boolean deleteFlag);
     Iterable<House> findByNameContainsIgnoreCaseAndDeleteFlag(String name,boolean deleteFlag);
     @Query("SELECT h FROM House h JOIN h.convenients c " +
