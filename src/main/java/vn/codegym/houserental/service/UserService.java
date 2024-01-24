@@ -12,6 +12,7 @@ public interface UserService extends UserDetailsService {
     void saveUpdate(User user) throws CommonException;
 
     Iterable<User> findAll();
+    Iterable<User> findAllByIdNotAndDeleteFlag(Long id);
 
     User findByUsername(String username);
     User findByEmail(String email);
@@ -32,5 +33,7 @@ public interface UserService extends UserDetailsService {
     Iterable<User> searchUserByName(String name);
     String generateVerificationToken(User user);
     boolean activateUserAccount(String token);
-
+    void registerHost(Long id);
+    void acceptHost(Long id);
+    void deleteUser(Long id);
 }
