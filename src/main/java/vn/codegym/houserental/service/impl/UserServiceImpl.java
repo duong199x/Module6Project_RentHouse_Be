@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.codegym.houserental.exception.CommonException;
+import vn.codegym.houserental.model.Booking;
+import vn.codegym.houserental.model.BookingStatus;
 import vn.codegym.houserental.model.account.User;
 import vn.codegym.houserental.model.account.UserPrinciple;
 import vn.codegym.houserental.repository.UserRepository;
@@ -53,6 +55,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Iterable<User> findAll() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public Iterable<User> findAllByIdNotAndDeleteFlag(Long id) {
+        return userRepository.findAllByIdNotAndDeleteFlag(id, false);
     }
 
     @Override
@@ -159,5 +166,29 @@ public class UserServiceImpl implements UserService {
         }
 
         return false;
+    }
+    @Override
+    public void registerHost(Long idUser) {
+        Optional<User> user = userRepository.findById(idUser);
+        if (user.isPresent()){
+            user.get().setIsOwner(1);
+            userRepository.save(user.get());
+        }
+    }
+    @Override
+    public void acceptHost(Long idUser) {
+        Optional<User> user = userRepository.findById(idUser);
+        if (user.isPresent()){
+            user.get().setIsOwner(2);
+            userRepository.save(user.get());
+        }
+    }
+    @Override
+    public void deleteUser(Long id){
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()){
+            user.get().setDeleteFlag(true);
+            userRepository.save(user.get());
+        }
     }
 }
